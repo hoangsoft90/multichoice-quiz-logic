@@ -1,0 +1,210 @@
+-------------------------------Gồm các tables:
+AI=auto inscrease
+
+[vcn_answers]: 
+id(AI),answer,answer_link_question,text2next_question,answer_object_type,link_object_type,question
+
+[vcn_customers]
+id(AI),post_date,phone,fullname,birth,CMT,
+
+[vcn_data]
+id(AI),question,
+
+[customer_trans]
+today_trans(int)
+
+[vcn_histories]
+id(AI),customer_id,result,company,salary,save_history,post_date,post_time,loan,note
+
+[vcn_histories1]
+hid(join vcn_histories.id),answer_text,result,answer_id
+
+[report_trans]
+
+[vcn_news]
+post_time,is_new,title,
+
+[vcn_faq]
+
+->import từ test1.sql
+-------------------------------Huong dan phần câu hỏi-----------------------------------
+*Nhập câu hỏi: 
+-để chỉnh sửa câu hỏi ->nhap-cau-hoi.php?edit=<ID>
+-để nhập câu hỏi mới -> nhap-cau-hoi.php
+
+//phần câu hỏi
++Câu hỏi: nhập nội dung câu hỏi
++CSS: tích vào Default question CSS
++Action: thưởng để trống
++Link question: 0=nếu các câu trả lời của câu hỏi có liên kết đến 1 câu khác. Ngược lại sẽ nhảy đến câu đó cho dù chọn bất kỳ câu trả lời nào->đây là ID của câu hỏi (hiển thị ở bên pải nếu bạn dê chuột vào nút edit/xoá)
+
+//phần câu trả lời
+-không được để trống, pải có ít nhất 1 câu trả lời. Vậy nếu bạn muốn để trống thì sao? giải páp là để lại dấu cách or viết 1 đoạn javascript k giao diện. ie:
+	var sdfdf="dsdg";
+-bạn có thể xoá or thêm 1 hay nhiều câu trả lời bằng cách nhấn vào '+Thêm trả lời'  or nhấn vào dấu X để xoá câu trả lời đó.
+[]Answer object type: tích vào nếu nội dung câu hỏi nhập javascript, có 1 số đối tượng để thêm nội dung vào câu hỏi:
+	//đối tượng câu trả lời đó
+	answer;
+	ie: 
+	#thêm input text
+	var birth=document.createElement('input');
+	answer.appendChild(birth);
+	answer.appendChild(document.createTextNode('(VD: 09/04/1990)'));
+
+[]Link object type: liên kết đến 1 câu hỏi khác nếu như chọn câu trả lời này (ID của câu hỏi hiện ở cột bên pải).
+	-phần này có thể bổ xung thêm javascript (nhớ tick vào Link object type) để hỗ trợ cho phần có javascript ở trên.
+VD:
+---------------------	
+//############## Ng dùng chọn ngày/tháng..và chuyển sang câu sau có điều kiện.
+[*]Answer object type:
+//thêm input text
+var birth=document.createElement('input');
+answer.appendChild(birth);
+answer.appendChild(document.createTextNode('(VD: 09/04/1990)'));
+
+[*]Link object type:
+//vd sử lý sự kiện, note: những lệnh dưới đây cần pải đưa vào sự kiện, vì đến câu hỏi đó pải chạy
+$( birth ).datepicker({onSelect:function(dateText, inst) {
+	var d1=new Date(dateText);
+	var d2=new Date();
+	var age=d2.getYear()-d1.getYear();
+	if(age<21 || age>60){
+		//điều chỉnh lại next câu hỏi trong quá trình chọn datepicker để khi nhấn nút "next" sẽ chuyển sang câu hỏi đó.
+		next_question_listener(6,[data.answer_id,birth.value]);		#if/then next sang question có ID 6, lưu giá trị câu trả lời từ ng dùng answer_id & answer value.
+		set_text2next(6,"Tuoi 21 den 60 moi dc vay");		#thiết lập nội dung hiển thị giải thích đến câu sau.
+	} 
+	else next_question_listener(4,[data.answer_id,birth.value]);
+	//note nếu k có giá trị do ng dùng điền thì lấy giá trị mặc định
+	next_question_listener(6,[data.answer_id,data.answer,data.question]);		#buộc pải ghi
+},
+changeMonth: true,changeYear: true});
+$(birth).datepicker( "option", 'dateFormat', 'yy-mm-dd' );
+$(birth).datepicker("setDate", "1986-06-19");
+
+-Note: thứ tự các câu hỏi không quan trọng.
+---------------------
+//############## Lưu lịch sử ở câu cuối - hiển thị form lưu thông tin khách hàng
+[*]Answer object type:
+answer.style.textAlign='center';
+append('Nhấn vào đây để hoàn tất quá trình tư vấn của bạn:');		#hàm thêm string/element vào answer thay vì answer.appendChild
+var but1=c_but1('Lưu hồ sơ');
+but1.className='saveCustomerBut';
+//hiển form lưu thông tin.
+dlg_opt({
+	auto:1,			#bật/tắt chế độ tự động hiển thị form lưu thông tin khi đến bước cuối,
+	button:but1		#thêm nút but1 để trigger form lưu nếu nhấn vào nút,nếu chỉ định button trigger thì luôn hiển form dưới dạng dialog
+	type:'popup'	#ko chỉ định or chỉ định 'popup' thì form hiển thị dạng dialog
+					#type:'page' ->hiển thị form ở nội dung câu hỏi.
+});		
+
+#thêm hook chạy khi hiển thị đến câu hỏi cuối khi bấm câu trả lời cuối, để lưu vào lịch sử (tránh mất quá trình này khi thống kê lại toàn bộ quá trình)
+#như giải thích ở trên tất cả các lệnh liên quan đến dữ liệu của trắc no (câu hỏi &trả lời), thì pải đưa vào sự kiện. Trong TH ở đây k có sự kiện cho ng dùng thì dùng sự kiện load của answer, khi đến load đến question đó thì chạy lệnh.
+answer_callback(function(data){		#data: dữ liệu answer
+	set_question_history();		//lưu câu hỏi này vào lịch sử trắc nghiệm.
+	set_history_result(0);	//thiết lập kết quả tư vấn: 0=thất bại, 1=thành công đủ điều kiện vay.
+});		
+-mỗi answer có thể có 1 answer_callback
++k dùng sự kiện answer_callback để next question như: next_question_listener,next_question ->vì 1 lý do nào đó lệnh next question bị xoá sau khi gọi answer_callback. Để sửa lỗi này, ta dùng event: answer_picker
++như vậy answer_callback thường dùng cho question cuối.
+
+-sự kiện answer_picker dùng cho answer có pần text và nút chọn radio. Mỗi khi chọn answer sẽ pát sinh sự kiện này.ie:
+answer_picker();
++dùng sự kiện này cho answer để next question có kết hợp với dữ liệu ở câu hỏi trước:
+answer_picker(function(){
+if(get_quest_history(16) && get_quest_history(16)[0]==48){
+    if(get_quest_history(17) && get_quest_history(17)[0]==38){
+         next_question_listener(20,[data.answer_id,data.answer,data.question]);alert(20);
+    }
+    else {next_question_listener(21,[data.answer_id,data.answer,data.question]);alert(21);}
+}
+});
+
+#có thể thêm nội dung câu trả lời
+set_question_history('Prdudential');
+---------------------
+//############## Ng dùng nhập thông tin ở câu hỏi và next sang câu tiếp theo.
+[*]Answer object type:
+var cty=document.createElement('input');
+answer.appendChild(cty);
+var but=c_but1('Tiếp');
+but.onclick=cty_next;		//sự kiện nút
+answer.appendChild(but);
+
+[*]Link object type:
+function cty_next(){
+	p.ref.get(1).dbtable['company']=cty.value;
+	next_question(8);			#tự động thực hiện chuyển sang câu số 8 ngay lập tức bằng lệnh,  thay cho nút bấm next.
+}
+-cách khác k tạo nút next riêng mà hiển thị nút next của hệ thống:
+show_next_button();
+
+/*lưu dữ liệu phát sinh từ người dùng khi trắc nghiệm, có thể cho input text cho ng dùng nhập. */
+//truy cập đối tượng câu hỏi hiện tại
+p.ref;
+//đối tượng mảng (member of p.ref) dùng để lưu chữ thông tin của ng dùng ở câu hỏi đó.
+p.ref.get(1).dbtable['company']=cty.value;		#vd thêm pần từ như ở vd trên
+
+//################# TH muốn lấy đáp án trả lời của ng dùng ở các câu khác
+-Mục đích kết hợp với các câu trả lời trước đã trả lời để làm điều kiện.
+[*]Answer object type/Link object type:
+//sử dụng hàm get_quest_history, lấy trả lời của câu hỏi có id.
+//get_quest_history return with format of array: [answer-id,answer-text,question-text]
+if(get_quest_history(3) && get_quest_history(3)[0]==3){
+	...
+}
+
+/*reference*/
+//get answer data, see: js.js
+answer_data().data;..	//answer data
+
+
+*Chỉnh sửa câu hỏi:
+Thêm tham số: ?edit=<ID câu hỏi> nhấn <Enter>
+Dữ liệu câu hỏi & các câu trả lời được hiển ra. Tại đây có thể thêm/sửa nội dung của chúng.
+
+*Xoá câu hỏi: ở cột bên pải nhấn biểu tượng X để xoá câu hỏi & các câu trả lời của nó.
+
+//#########################lấy nội dung lịch sử tư vấn
+var qview=new qChain();    //instance qChain class
+qview.load();    //load questions
+...
+frm.histories.value=qview.get_full_histories();		#chuỗi gồm câu hỏi và đáp án ng dùng trả lời.
+
+//lấy kết quả tư vấn xem có đủ điều kiện hay ko
+if(qview.history.result) alert('đủ điều kiện');else alert('ko đủ điều kiện');
+
+-----------------------------Hướng dẫn phần FAQ-----------------------------------
+Mỗi 1 câu hỏi sẽ được liên kết 1 or nhiều FAQ (câu hỏi thường gặp để giải thích cho câu hỏi đó). Truy cập: faq.php để thêm & chỉnh sửa FAQ.
+*Thêm faq: truy cập faq.php, 
+Question: nhập ID câu hỏi.
+Có sẵn 1 faq cho bạn nhập gồm 2 field: hỏi & đáp, nhấn nút '+Thêm hỏi đáp' để thêm nhiều faq cho câu hỏi đó.
+
+*Thêm/chỉnh sửa faq cho câu hỏi: trên thanh url thêm tham số: ?edit=<ID câu hỏi>
+ie: faq.php?edit=2
+Nếu câu hỏi đó có faq thì sẽ được hiện thị. Hoặc nếu ko có thì bạn có thể thêm (field Question có nhập ID của câu hỏi rồi)
+Nhấn nút save để hoàn tất.
+
+*Xoá faq: vào chế độ chỉnh sửa của 1 faq & nhấn nút Xoá FAQ.
+
+------>Xem dữ liệu mẫu: test1.sql
+
+[uage]:
+var qview=new qChain();    //instance qChain class
+qview.auto_next=true;		//tự động next question
+//dùng các nút next,back,reset k pải mặc định
+qview.init({
+	next_btn:$('#next'),
+	prev_btn:$('#back'),
+	reset_btn:$('#reset')
+});
+
+qview.load();    //load questions
+$(document).ready(function(){
+	qview.faq=document.getElementById('faq');    //faq container (optional)
+    $('#vcn').append(qview.get());    //desploy app
+});    
+
+
+/////////1 Số điều lưu ý/////////////
+*Trong TH ý tưởng của bạn là 2 câu hỏi khác nhau sẽ chuyển đến cùng 1 câu hỏi (A). Nhưng câu hỏi này (A) có thể sẽ chuyển đến những câu hỏi khác nhau từ 2 câu hỏi đó, vậy ta pải nhân bản câu (A) để mỗi 1 câu hỏi sẽ chuyển đến các câu nhân bản đó. Nên đánh dấu để pân biệt.
+*Cho phép nhập html ở câu hỏi và câu trả lời, k giới hạn các ký tự, ie: ',"<>=&...

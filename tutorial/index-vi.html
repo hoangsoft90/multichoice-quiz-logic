@@ -1,0 +1,287 @@
+<html>
+<head>
+	<title>Multi Choice Question Logical</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="js/shCore.js"></script>
+	<script src="js/shBrushJScript.js"></script>
+	<script src="js/shBrushPlain.js"></script>
+	<script src="js/shBrushPhp.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/shCore.css">
+	<link rel="stylesheet" type="text/css" href="css/shThemeDefault.css">
+	
+	<style>
+	</style>
+</head>
+<body>
+<div id="header">
+	<h1>Multi Choice Question Logical</h1>
+	<span class="slogan">A lightweight multichoice question logical</span>
+</div>
+<div id="wrapper">
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+Screenshot<br/>
+<img src="images/img1.jpg"/><br/>
+<strong>Demo:</strong>
+Mở trang: <a href="http://hn.tindung24h.com/">http://hn.tindung24h.com/</a> trên trình duyệt và chọn một khu vực bạn sẽ được chuyển đến trang hiện thị các câu hỏi trắc nghiệm trực tuyến. Hiện tại bộ code này đang sử dụng cho dịch vụ tư vấn vay vốn trực tuyến trên website: tindung24h.com
+
+<h1>Configuration</h1>
+<h2>Installation</h2>
+[HTML]
+<pre class="brush: plain">
+<div id="questions_holder"></div>
+</pre>
+<p>
+[JS]
+<pre class="brush: js">
+var qview=new qChain();    //instance qChain class
+//auto next question
+qview.auto_next=true;
+
+//load question
+qview.load();
+
+$(document).ready(function(){
+	$('#questions_holder').append(qview.get());    //add instance to document
+});
+</pre>
+</p>
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<h2>FAQ</h2>
+<div>
+<ul>
+	<li>Faq là những câu hỏi mang tính chất giải thích cho các câu hỏi trắc nghiệm</li>
+	<li>Mỗi một câu hỏi được liên kết với 1 hay nhiều FAQ thuộc về câu hỏi đó</li>
+</ul>
+<pre class="brush: js">
+//get faq holder
+$(document).ready(function(){
+	qview.faq=document.getElementById('faq');    //faq container
+    
+});
+
+</pre>
+</div>
+<!-- data -->
+<h1>Import Data</h1>
+<h2>Question Editor</h2><!-- #question editor -->
+<img src="images/question-editor.png"/>
+<ul>
+	<li>administrator using nature php, database mysql (phpMyAdmin)</li>
+	<li></li>
+</ul>
+<strong>*Add new Question:</strong><br/>
+Go: /nhap-cau-hoi.php<br/>
+-Nhập nội dung câu hỏi yêu cầu 1 số fields:<br/>
++Câu hỏi: nội dung câu hỏi.<br/>
++CSS: <br/>
+	<ul>
+	<li>tick on 'default question css' to use default css for question content .</li>
+	<li>tick on 'default answer css' to use default css for answer content.</li>
+	</ul>
++Link question: ID câu hỏi liên kết.<br/>
+	Nhìn ở cột bên trái là các câu hỏi đã tạo trước đó, dê chuột vào biểu tượng bút chì để xem ID của câu hỏi.<br/>
+
+-Nhập câu trả lời ở phía dưới:<br/>
+	<ul>
+	<li>+text input đầu tiên nhập nội dung câu trả lời. Bạn có thể thực thi javascript tại field này bằng cách nhấn vào answer object type, phần này sẽ hướng dẫn cụ thể ở sau.</li>
+	<li>+Field tiếp theo nhập ID của câu hỏi kế tiếp. Nghĩa là: câu hỏi này sẽ kết nối với câu hỏi tiếp theo có ID đó.</li>
+	<li>+Explain: nhập chuỗi nội dung giải thích cho câu trả lời này.</li>
+	</ul>
+Mỗi một câu hỏi thường có 1,2,3,4.. câu trả lời, tương tự như vậy nhấn vào nút "add answer" để thêm câu trả lời mới.<br/>
+Note: Bắt buộc phải có câu trả lời (không sẽ báo lỗi), nếu không muốn hiển thị thì dùng javascript. Trình bày ở sau.
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<p>
+<strong>Content accept HTML format</strong><br/>
+-Nội dung nhập có thể là plain/text hoặc định dạng phong phú html, làm cho phần nội dung câu hỏi/câu trả lời sinh động hơn.<br/>
+
+</p>
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<p>
+<strong>Hỗ trợ javascript</strong><br/>
+Example: Câu hỏi hỏi về tuổi của người dùng, mà yêu cầu người dùng nhập tuổi. Ta sẽ dùng 1 input text hiển thị ở câu hỏi để cho người dùng nhập vào, sau đó nhấn nút next.<br/>
+<img src="images/img2.jpg"/>
+<ul>
+	<li>Question: What is your birth?</li>
+	<li>CSS: tick radio "default question css"</li>
+	<li>Link question: 0</li>
+</ul>
+Answer bellow:<br/>
++Tick "Answer object type"  to convert answer content into javascript. Write some javascript code to answer field:<br/>
+<pre class="brush:js">
+var birth=document.createElement('input');
+answer.appendChild(birth);
+answer.appendChild(document.createTextNode('(EX: 09/04/1990)'));
+</pre>
+-answer là Object Dom element for answer item. You can use 'append' function to do this:
+<pre class="brush:js">
+var birth=document.createElement('input');
+append(birth);		//instead of answer.appendChild(birth);
+append(document.createTextNode('(EX: 09/04/1990)'));
+</pre>
++Next, Tick "Link object type" checkbox to enabled javascript, and write event for input text of birth:<br/>
+<pre class="brush:js"> 
+$( birth ).datepicker({onSelect:function(dateText, inst) {
+	var d1=new Date(dateText);
+	var d2=new Date();
+	var age=d2.getYear()-d1.getYear();
+	if(age<21 || age>60){
+		next_question_listener(6,[data.answer_id,birth.value,data.question]);
+		set_text2next(6,'Tuoi 21 den 60 moi dc vay');
+	} else next_question_listener(4,[data.answer_id,birth.value,data.question]);
+},
+	changeMonth: true,
+	changeYear: true
+});
+$(birth).datepicker('option', 'dateFormat', 'yy-mm-dd' );
+$(birth).datepicker('setDate', '1986-06-19');
+</pre>
+-this code run after answer content above. Field này thường viết tiếp phần javascript, tiếp nối javascript được viết ở phần nội dung câu trả lời, ví dụ như:  sự kiện,..<br/>
+-Ở ví dụ này, là sự kiện của input text, sử dụng jquery datepicker khi ng dùng click vào input sẽ hiển ra bảng ngày tháng cho ng dùng chọn. Thiết lập điều kiện để lựa chọn câu hỏi tiếp theo.<br/>
+<pre class="brush:js">
+//nhảy đến câu hỏi ID=6, tham số thứ 2 là mảng 2 phần tử gồm: id câu trả lời (default: data.answer_id), giá trị của câu trả lời được lấy từ input text.
+next_question_listener(6,[data.answer_id,birth.value,data.question]);
+note:
+	Nếu giá trị của câu trả lời k pải từ ng dùng cung cấp thì sử dụng mặc định: data.answer<br/>
+	next_question_listener(question_ID,[data.answer_id,data.answer,data.question]);
+	
+//set explain string to next question
+set_text2next(6,'Tuoi 21 den 60 moi dc vay');
+</pre>
+Note: Tất nhiên phần code này có thể viết chung vào phần nội dung câu trả lời (javascrit) ở trên.<br/>
+Bạn cũng có thể tạo nút chuyển câu hỏi cho riêng mình, thay vì nhấn nút next của hệ thống:<br/>
+<pre class="brush:js">
+var but=$('<input/>').attr({type:'button',value:'Next question'});
+but.click(cty_next);		//sự kiện nút
+$(answer).append(but);
+//next button event
+function cty_next(){
+	//sử dụng database dbtable, but dbtable is simple array for storing user values. We not recommand use this method
+	p.ref.get(1).dbtable['company']=cty.value;		
+	//next question with question ID
+	next_question(8);
+}
+</pre>
+</p>
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<p>
+<strong>Lưu lịch sử quá trình trắc nghiệm của người dùng-hiển thị form lưu thông tin của người dùng</strong><br/>
+-Open include/templates.php find function name 'final_customer_form'. Đây là form lưu thông tin người trắc nghiệm được hiển thị sau câu hỏi cuối.<br/>
+-Có 2 kiểu hiển thị: form hiển thị dạng dialog (popup) hoặc hiển thị ỏ ngay câu trả lời chứa code ở dưới đây (page).<br/>
+-form mẫu tìm ở file include/templates.php hàm final_customer_form, bạn có thể thêm/bớt 1 số fields tuỳ ý.
+<pre class="brush:js">
+//user form option
+dlg_opt({
+	auto:1,		//auto showing user form
+	type:'page'		//hiển thị form ở nội dung câu trả lời này. Nếu type='popup' form được hiển thị dạng dialog.
+});
+//sự kiện khi nạp câu trả lời này
+answer_callback(function(){
+	set_question_history();		//lưu câu hỏi cuối này vào lịch sử trắc nghiệm.
+	//set_question_history('result of your test');		//nếu muốn thêm nội dung của câu hỏi cuối này,
+	
+	//thiết lập kết quả của quá trình trắc nghiệm
+	set_history_result('result of your test');		
+});
+
+</pre>
+
+</p>
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<p>
+<strong>Sự kiện lựa chọn cho từng câu trả lời + kết hợp với dữ liệu của câu hỏi trước</strong><br/>
+-Trong TH, mỗi một câu trả lời có 1 điều kiện, để chuyển tiếp sang câu hỏi mới, thì sử dụng sự kiện 'answer_picker'.<br/>
+-có thể sử dụng dữ kiện là phần trả lời của câu hỏi đã trải qua làm điều kiện sử dụng trong sự kiện này.
+<pre class="brush:js">
+answer_picker(function(){
+	if(get_quest_history(16) && get_quest_history(16)[0]==48){
+		if(get_quest_history(17) && get_quest_history(17)[0]==38){
+			 next_question_listener(20,[data.answer_id,data.answer,data.question]);
+		}
+		else next_question_listener(21,[data.answer_id,data.answer,data.question]);
+	}
+});
+</pre>
+<ul>
+	<li>get_quest_history(16): lấy dữ liệu của hỏi có ID=16 return array of [answer_id,answer_text,question_text] </li>
+	<li>answer_id: ở chế độ chỉnh sửa câu hỏi & câu trả lời sẽ tìm thấy answer ID.</li>
+</ul>
+</p>
+
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<p>
+<strong>*Edit exists question</strong><br/>
+-Ở cột bên trái hiển thị danh sách các câu hỏi đã có, bạn có thể dễ dàng chỉnh sửa or xoá câu hỏi bằng cách nhấn vào biểu edit or delete.
+</p>
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<p>
+<h2>FAQ Editor</h2><!-- #FAQ editor -->
+<img src="images/faq-editor.png"/><br/>
+-Để thêm/sửa FAQ cho câu hỏi, truy cập URL: <br/>
+<pre class="brush:plain">
+/faq.php?edit=<question_ID>
+</pre>
+Để thêm nhiều nội dung cho faq nhấn vào "Thêm hỏi đáp".<br/>
+-Để xoá phần nội dung của faq nhấn vào biểu tượng 'X' để xoá phần đó.
+
+</p>
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<p>
+<strong>Báo cáo kết quả trắc nghiệm</strong><br/>
+<img src="images/multichoice-result.png"/><br/>
+-Bạn sẽ cần lấy lịch sử trắc nghiệm và kết quả ở câu hỏi cuối cùng.<br/>
+*Lịch sử trắc nghiệm:<br/>
+
++Lấy kết quả tư vấn dạng text có dạng:<br/>
+<pre class="brush:plain">
+Question 1
+answer 1
+----------------
+Question 2
+answer 2
+---------------
+Question 3
+answer 3
+-----------------
+.......
+</pre>
+<pre class="brush:js">
+qview.get_full_histories();	
+</pre>
+<br/>
++Kết quả tư vấn dạng JSON:<br/>
+Ie:
+<pre class="brush:plain">
+{
+	"history":"1-1,2-5,3-6,4-9,6-12,13-31",
+	"answers_text":{"1":"Nguoi di lam huong luong","5":"Tren 1 nam","6":"Co","9":"Duoi 1 nam","12":"Khong","31":"X"}
+}
+</pre>
+<pre class="brush:js">
+qview.get_history();
+</pre>
+-Trả về mảng 2 keys:<br/>
+<ul>
+	<li>history: là một dãy các câu hỏi và câu trả lời của câu hỏi đó có dạng: question_ID-answer_ID, mỗi câu hỏi cách nhau dấu phẩy. </li>
+	<li>answers_text: là đối tượng JSON có key=answer ID và value=nội dung câu trả lời</li>
+</ul>
+*Lấy kết quả của quá trình trắc nghiệm<br/>
+-Ví dụ bạn tưởng tượng là bộ câu hỏi trắc nghiệm này là bài kiểm tra đánh giá xem có đỗ hay trượt.<br/>
+-Xem thiết lập kết quả đã nói ở phần trên. Đây là lúc lấy kết quả đó.
+<pre class="brush:js">
+qview.history.result;
+</pre>
+
+</p>
+</div>
+<p></p>
+<p></p>
+<hr/>
+<div style="text-align:center">
+Liên hệ: <a href="mailto:laptrinhweb123@gmail.com">laptrinhweb123@gmail.com</a> - <a href="mailto:kythuat.hoangweb@gmail.com">kythuat.hoangweb@gmail.com (<a href="http://hoangweb.com">hoangweb.com</a>)</a>
+</div>
+<script>
+SyntaxHighlighter.all();
+</script>
+</body>
+</html>

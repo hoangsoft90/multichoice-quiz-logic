@@ -1,0 +1,1 @@
+﻿Each one .sql file includes all tables data your need. Please consider them, you will have learned a .sql in each one eg create questions & answers.

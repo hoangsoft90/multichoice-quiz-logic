@@ -1,0 +1,293 @@
+<html>
+<head>
+	<title>Multiple Choice Quiz Logic</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="js/shCore.js"></script>
+	<script src="js/shBrushJScript.js"></script>
+	<script src="js/shBrushPlain.js"></script>
+	<script src="js/shBrushPhp.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/shCore.css">
+	<link rel="stylesheet" type="text/css" href="css/shThemeDefault.css">
+	
+	<style>
+	</style>
+</head>
+<body>
+<div id="header">
+	<h1>Multiple Choice Quiz Logic</h1>
+	<span class="slogan">A lightweight multichoice question logical</span>
+</div>
+<div id="wrapper">
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+Screenshot<br/>
+<img src="images/img1.jpg"/><br/>
+<strong>Demo:</strong>
+Open site: <a href="http://hn.tindung24h.com/">http://hn.tindung24h.com/</a> on your browser and choose a location to test.
+
+<h1>Configuration</h1>
+<h2>Installation</h2>
+[HTML]
+<pre class="brush: plain">
+<div id="questions_holder"></div>
+</pre>
+<p>
+[JS]
+<pre class="brush: js">
+var qview=new qChain();    //instance qChain class
+//auto next question
+qview.auto_next=true;
+
+//load question
+qview.load();
+
+$(document).ready(function(){
+	$('#questions_holder').append(qview.get());    //add instance to document
+});
+</pre>
+</p>
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<h2>FAQ</h2>
+<div>
+<ul>
+	<li>Faq to explain the multiple choice questions</li>
+	<li>Each question is linked to one or more of FAQ items</li>
+</ul>
+<pre class="brush: js">
+//get faq holder
+$(document).ready(function(){
+	qview.faq=document.getElementById('faq');    //faq container
+    
+});
+
+</pre>
+</div>
+<!-- data -->
+<h1>Import Data</h1>
+<h2>Question Editor</h2><!-- #question editor -->
+<img src="images/question-editor.png"/>
+<ul>
+	<li>Backend using pure of php, database of mysql (free phpMyAdmin)</li>
+</ul>
+<h4>*Add new Question:</h4><br/>
+Go: /input.php<br/>
+-Input question data require some fields:<br/>
++Question: question content<br/>
++CSS: <br/>
+	<ul>
+	<li>Tick on 'Default question css' to use default css for question content .</li>
+	<li>Tick on 'Default answer css' to use default css for answer content.</li>
+	</ul>
++Link question: Question ID to link.<br/>
+	Look at the right sidebar is all questions created from you, then mouse over pencil icon to see the ID of that question by tooltip.<br/>
+
+-Input Answer data:<br/>
+	<ul>
+	<li>+Text input below the string "Answer object type" is answer content. You can execute javascript in this field by clicking on the radio "Answer object type", this section will provide the following.</li>
+	<li>+The next Field (below "Link object type") enter the ID of the next question. Meaning: this question will connect to that question.</li>
+	<li>+Explain to next question: add some explain string it will display in next question when user select this answer for this question.</li>
+	</ul>
+Once a question is usually get 1,2,3, 4 ... the answer, so click on the button "add answer" to add a new answer.<br/>
+Note: Answer content can not be empty (otherwise the error message), if you don't want users to see the question answers, provide some javascript code. We'll talk later.
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<p>
+<h4>Content accept HTML format</h4><br/>
+-The content type may be plain/text or html rich text, make the text question/answer lively.<br/>
+
+</p>
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<p>
+<h4>Support javascript</h4><br/>
+Example: The question asked about the age of the user, which requires users to enter old age. I will use a input text shown in question so that the user entered, and then click the next button.<br/>
+<img src="images/img2.jpg"/>
+<ul>
+	<li>Question: What is your birth date?</li>
+	<li>CSS: tick radio "Default question CSS"</li>
+	<li>Link question: 0</li>
+</ul>
+Answer bellow:<br/>
++Tick "Answer object type"  to convert answer content into javascript. Write some javascript code to answer field:<br/>
+<pre class="brush:js">
+var birth=document.createElement('input');
+answer.appendChild(birth);
+answer.appendChild(document.createTextNode('(EX: 09/04/1990)'));
+</pre>
+-answer là Object Dom element for answer item. You can use 'append' function to do this:
+<pre class="brush:js">
+var birth=document.createElement('input');
+append(birth);		//instead of answer.appendChild(birth);
+append(document.createTextNode('(EX: 09/04/1990)'));
+</pre>
++Next, Tick "Link object type" checkbox to enabled javascript, and write event for input text of birth:<br/>
+<pre class="brush:js"> 
+$( birth ).datepicker({onSelect:function(dateText, inst) {
+	var d1=new Date(dateText);
+	var d2=new Date();
+	var age=d2.getYear()-d1.getYear();
+	if(age<21 || age>60){
+		next_question_listener(6,[data.answer_id,birth.value,data.question]);
+		set_text2next(6,'Tuoi 21 den 60 moi dc vay');
+	} else next_question_listener(4,[data.answer_id,birth.value,data.question]);
+},
+	changeMonth: true,
+	changeYear: true
+});
+$(birth).datepicker('option', 'dateFormat', 'yy-mm-dd' );
+$(birth).datepicker('setDate', '1986-06-19');
+</pre>
+-This code run after answer content above. This Field usually keep the javascript is written in the content of the answer, such as: javascript event,..<br/>
+-In this example, we create event for the input text, use the jquery datepicker when the user click on the input will bring table of dates for the users selection. Set the condition to get the next question
+<br/>
+<pre class="brush:js">
+//the second parameter is the array of 2 elements: answer id (default: data.answer_id), the value of the answer is taken from the input text
+next_question_listener(6,[data.answer_id,birth.value,data.question]);
+
+//If the value of the answer not users typing, use default: data.answer
+next_question_listener(question_ID,[data.answer_id,data.answer,data.question]);
+	
+//set explain string show to next question
+set_text2next(6,'Aged from 21 to 60, then get the loan');
+</pre>
+Note: of course this part of code can be written included the answer javascript content above.<br/>
+You can also create your own next question button, instead the click button of the system:<br/>
+<pre class="brush:js">
+var but=$('<input/>').attr({type:'button',value:'Next question'});
+but.click(cty_next);		//button click event
+$(answer).append(but);
+//next button event
+function cty_next(){
+	//use dbtable variable, but dbtable is simple array for storing user values. We not recommand use this method
+	p.ref.get(1).dbtable['company']=cty.value;		
+	//next question with question ID
+	next_question(8);
+}
+</pre>
+-In addition the following functions can be used to display the next button of the system:<br/>
+<pre class="brush:js">
+//show next button
+show_next_button();
+</pre>
+
+</p>
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<p>
+<h4>Save the user's quiz - show form to save the user's information</h4><br/>
+-Open include/templates.php find function name 'final_customer_form'. This form can be display in the last question.<br/>
+-There are 2 types: Displays the form as a popup (popup) or place form bellow question content (page).<br/>
+-sample form can be found at file include/templates.php for function 'final_customer_form', you can add/remove some fields.
+<pre class="brush:js">
+//user form option
+dlg_opt({
+	auto:1,		//auto showing user form
+	type:'page'		//place form in this answer. If type='popup' form will showing as popup.
+});
+//triger when load this answer
+answer_callback(function(){
+	set_question_history();		//Save this question (refer to last question) in the Quiz history
+	//set_question_history('result of your tests');		//you can add answer content to this question,
+	
+	//set result of user quiz, 
+	set_history_result('result of your tests');		
+});
+
+</pre>
+
+</p>
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<p>
+<h4>set condition for each answer + combined with the data of previous questions</h4><br/>
+-In any case, every a answer you want to link to each other question , then use event 'answer_picker'.<br/>
+-get answer of user of pass questions as a condition for the next questions.
+<pre class="brush:js">
+answer_picker(function(){
+	if(get_quest_history(16) && get_quest_history(16)[0]==48){
+		if(get_quest_history(17) && get_quest_history(17)[0]==38){
+			 next_question_listener(20,[data.answer_id,data.answer,data.question]);
+		}
+		else next_question_listener(21,[data.answer_id,data.answer,data.question]);
+	}
+});
+</pre>
+<ul>
+	<li>get_quest_history(16): get question data with ID=16 return array of [answer_id,answer_text,question_text] </li>
+	<li>answer_id: in edit question mode (input.php), you will find answer ID.</li>
+</ul>
+</p>
+
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<p>
+<h4>*Edit exists question</h4><br/>
+-In the left column displays already the list of questions, you can easily edit or delete the question by clicking on the edit or delete icon.
+</p>
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<p>
+<h2>FAQ Editor</h2><!-- #FAQ editor -->
+<img src="images/faq-editor.png"/><br/>
+-To add/edit the FAQ for specific questions, go the URL: <br/>
+<pre class="brush:plain">
+/faq.php?edit=< question_ID>
+</pre>
+To add more content to the faq click "Add FAQ item".<br/>
+-To delete the contents of the faq  click on icon ' X '.
+
+</p>
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+<p>
+<h4>Test results reports</h4><br/>
+<img src="images/multichoice-result.png"/><br/>
+-At this time, You will need to retrieve the history quiz.<br/>
+*The History Quiz:<br/>
+
++full history quiz is paragraph format of::<br/>
+<pre class="brush:plain">
+Question 1
+answer 1
+----------------
+Question 2
+answer 2
+---------------
+Question 3
+answer 3
+-----------------
+.......
+</pre>
+<pre class="brush:js">
+qview.get_full_histories();	
+</pre>
+<br/>
++simple history quiz is a JSON object:<br/>
+Ie:
+<pre class="brush:plain">
+{
+	"history":"1-1,2-5,3-6,4-9,6-12,13-31",
+	"answers_text":{"1":"The wage employment","5":"Over 1 year","6":"Yes","9":"Less than 1 year","12":"no","31":"X"}
+}
+</pre>
+<pre class="brush:js">
+qview.get_history();
+</pre>
+-return JSON object with 2 keys:<br/>
+<ul>
+	<li>history: is a sequence of questions and answers in the form of: question_ID-answer_ID, each question separate by comma. </li>
+	<li>answers_text: is JSON object containing key = answer ID and value = answer content</li>
+</ul>
+*Taking the results of the test process<br/>
+-For example do you imagine is the multiple choice questions is the test whether pass or fail.<br/>
+-The test result you established. It's time to get results.
+<pre class="brush:js">
+qview.history.result;
+</pre>
+
+</p>
+</div>
+<p></p>
+<p></p>
+<hr/>
+<div style="text-align:center">
+Contact Me: <a href="mailto:laptrinhweb123@gmail.com">laptrinhweb123@gmail.com</a> - <a href="mailto:kythuat.hoangweb@gmail.com">kythuat.hoangweb@gmail.com (<a href="http://hoangweb.com">hoangweb.com</a>)</a>
+</div>
+<script>
+SyntaxHighlighter.all();
+</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+.vcn_qform label{width:100px;float:left;height:28px;}
+/*question*/
+.qsingle{padding:2px;}
+.qsingle .question{font-size:15px;font-weight:bold;}
+.qsingle .answer:hover{
+	color:red;
+}
+.qsingle .answer label{float:none;font-weight:normal;cursor:pointer;}
+.qsingle .answer .current_answer{color:#EE1B2E;}
+.qsingle .moreInfo{
+	padding:3px;border:1px solid #FFAE06;background:#FFF0D2;margin-top:20px;padding-right:10px;
+	font-size: 18px;font-family:"Times New Roman", Times, serif;
+}
+.qsingle .moreInfo:before{
+	content:url('../images/warning.png');
+	float:left;
+	padding-right:5px;
+}
+
+.qchain{border:1px solid #dadada;padding:0px;width:100%;background:url('../images/tuvan.jpg') no-repeat bottom right;}
+.qchain .navigation{background:#EE1B2E;padding:0px;border:0px;height:30px;}
+.qchain .navigation .step{border:0px;padding:2px;padding-left:8px;padding-right:8px;background:#ffffff;color:#F21201;font-weight:bold;display:inline-block;margin:3px;}
+.qchain .navigation .current_step{border:0px;padding:2px;padding-left:8px;padding-right:8px;color:#ffffff;font-weight:bold;display:inline-block;margin:3px;background:#808080}
+.qchain .faq{border-left:1px solid #dadada;}
+.qchain .focus-qviewport{overflow:hidden;width:80%;padding:10px;min-height:180px;}
+.qchain .tool{padding:2px;background:#EE1B2E;border-top:1px solid #dadada;}
+
+/*short question bar*/
+.listquestion{border:1px solid #dadada;overflow:auto;max-height:500px;background:#ffffff;}
+.listquestion .current{background:#dadada;padding:3px;}
+.listquestion .vcn_qbar{padding:3px;border-top:1px dotted #808080;}
+.listquestion  .icon{float:right;height:14px;}
+.listquestion .vcn_qbar:hover{background:#dadada;cursor:pointer;}
+.listquestion .vcn_qbar .qbar-short{display:inline-block;width:85%;border-right:1px solid #dadada;}
+.listquestion .current .qbar-short{display:inline-block;width:85%;border-right:1px solid #dadada;}
+/*answer*/
+#tool1_content{background:#FFEFEF;padding:3px;border:1px solid #E0B7B7;}
+#answers{border:1x solid red;}
+.vcn_answers{background:#ffffff;}
+.vcn_answers .answers_holder{border:1px dotted #dadada;}
+.vcn_answers .answers_holder .answer{border-bottom:1px solid #808080;padding-bottom:3px;width:100%;}
+.vcn_answers .answers_holder .answer .label{padding:4px;border:1px solid #dadada;background:#FFBDBD;color:#E90A0A;display:table-cell;font-weight:bold;}
+.vcn_answers .answers_holder .answer .body{display:table-cell;width:100%;}
+.vcn_answers .answers_holder .answer:hover{background:#f1f2f3;}
+
+.close_but{border:1px outset #dadada;box-shadow:2px 2px 2px #f1f2f3;}
+.close_but:hover{background:#dadada;}
+/*login form*/
+.login_frm .label{width:300px;}
+/*faq*/
+.faq_item{padding-bottom:6px;padding-top:6px;border-bottom:1px dashed #dadada;}
+.faq_item:before{
+	content:url('../images/bullet_red_alt.png');
+	float:left;
+	margin-right:5px;
+	clear:both;
+}
+.faq_item .faq{font-weight:bold;color:#FF0202;}
+.faq_item .faq_answer{padding-left:37px;}
+
+/*common*/
+.fright{float:right;}
+.line{margin:10px;border:1px solid #dadada;}
+.label1{font-size:11px;color:#808080;}
+.bg1{background:#f1f2f3;}
+/*vcn gradient*/
+.vcn_gradient1{
+/* fallback */
+  background-color: #1a82f7;
+  background-image: url(../images/linear_bg_1.png);
+  background-repeat: repeat-y;
+  
+  /* Safari 4-5, Chrome 1-9 */
+  background: -webkit-gradient(linear, left top, right top, from(#1a82f7), to(#2F2727));
+  
+  /* Safari 5.1, Chrome 10+ */
+  background: -webkit-linear-gradient(left, #2F2727, #1a82f7);
+  
+  /* Firefox 3.6+ */
+  background: -moz-linear-gradient(left, #2F2727, #1a82f7);
+  
+  /* IE 10 */
+  background: -ms-linear-gradient(left, #2F2727, #1a82f7);
+  
+  /* Opera 11.10+ */
+  background: -o-linear-gradient(left, #2F2727, #1a82f7);
+}
+
+/*financial tool*/
+.tool_form{}
+.tool_form label{width:300px;}
+.tool_form .g{margin-bottom:16px;}
+.tool_form .inp1{
+	background-color: #F8F8F8;
+	/*font-size: 12px;*/
+	padding-left:10px;
+	padding-right:10px;
+}
+.tool_form .result{
+	border:2px solid red;box-shadow:3px 3px 3px #808080;padding:10px;display:inline-block;min-width:400px;
+	color: red;
+	font-size: 25px;
+	font-weight: bold;
+}
+.form-style1 label{font-weight:normal;font-size:11px;}
+
+/*---layout---*/
+#vcn_wrap{width:90%;margin:auto;border:1px solid red;}
+#header{height:50px;background:#DA8C9F;color:#fff;padding:5px;}
+#header h1{padding:0px;margin:0px;}
+
+.main{float:left;width:100%;}
+.main-left{float:left;width:21%;}
+.widget{border:1px solid #dadada;box-shadow:2px 2px 2px #dadada;padding:10px;margin-bottom:15px;}
+.widget h2{margin-bottom:5px;font-size:15px;}
+
+.vcn{float:right;width:77%;}
+.vcn .title{margin-bottom:10px;font-size:15px;margin-top:48px;}
+.right{float:right;border:1px solid red;width:31.66%;}
+.main-left1{float:left;width:68%;border:1px solid red;}
+
+/*customer form*/
+.customerform label{width:156px;}
+.final_customer_form{margin-top:10px;}
+.final_customer_form label{width:174px;font-weight:normal;text-align:right;margin-right:10px;}
+.final_customer_form .contacttime{display:inline-block;}
+.final_customer_form .contacttime label{float:none;}
+.customer_send_info{}
+
+.saveCustomerBut{
+padding: 10px;
+color: #E01010;
+font-weight: bold;
+cursor: pointer;
+font-size: 17px;
+}
+
+/*admincp*/
+.customerslist .result{background:#FFFF99;}
+.customerslist .phone{color:red;font-weight:bold;}
+.table-title{background:#808080;color:#ffffff;font-weight:bold;}
+#admin_tool1 form{float:left;}
+.answer_history_report{margin-bottom:10px;width:100%;}
+.answer_history_report .label{float:left;background:#EE1B2E;font-weight:bold;color:#ffffff;width:35px;text-align:center;font-size:20px;overflow:hidden;}
+.answer_history_report .question{margin-left:40px;}
+.answer_history_report .question p{margin:0px;margin-bottom:3px;padding:0px;}
+.smallpartner-logo{max-width:180px;max-height:40px;}
+/*segment*/
+.pages{margin-top:10px;}
+/*news*/
+.news-item{border-bottom:1px dashed  #dadada;padding:3px;}
+.news-item h2{color:#808080;font-size:13px;}
+.news-item p{margin:0px;}
+.list-news{list-style-type:square;margin-left:12px;}
+.list-news li{border-bottom:1px dashed  #dadada;padding-bottom:4px;padding-top:4px;}
+.news-detail h1{padding:0px;font-size:15px;color:#EE1B2E;margin-bottom:0px;}
+.news-detail .content{margin-top:20px;}
+.news-detail .list-news li{border:0px;}
+.full-list-news{margin-top:20px;}
